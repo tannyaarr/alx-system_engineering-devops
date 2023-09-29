@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#This script That displays the content of the file /etc/passwd using the while loop
+#This script reads /etc/passwd and displays user information in the specified format using the while loop
 
 while IFS=":" read -r username _ gid _ home shell; do
 	echo "The user $username is part of the group $gid gang, lives in $home and rides $shell."
