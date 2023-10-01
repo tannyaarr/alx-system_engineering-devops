@@ -3,14 +3,23 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+/**
+ * infinite_while - runs a infinite loop
+ * Return: 0 Always on success
+ */
+
 int infinite_while(void)
 {
 	while (1)
 	{
 		sleep(1);
-    	}
+	}
 	return (0);
 }
+/**
+ * main - creates 5  zombie process
+ * Return: 0 On success
+ */
 
 int main(void)
 {
