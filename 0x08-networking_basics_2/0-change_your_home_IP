@@ -8,7 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
-localhost_mapping="127.0.0.2 localhost"
+localhost_mapping="127.0.0.1 localhost"
 facebook_mapping="8.8.8.8 facebook.com"
 
 cp /etc/hosts /etc/hosts.backup
