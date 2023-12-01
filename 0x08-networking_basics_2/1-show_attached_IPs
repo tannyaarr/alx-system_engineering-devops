@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# displays all active IPv4 IPs on the machine it's executed on
 
 if [ "$(id -u)" -ne 0 ]; then
 	echo "Please run the script with sudo or as root."
