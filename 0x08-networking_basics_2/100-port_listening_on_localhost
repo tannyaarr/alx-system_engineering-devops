@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Bash scripts that listens on port 90 on localhost
+
+nc -l -p 98
