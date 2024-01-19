@@ -1,6 +1,6 @@
 #kills a process named killmenow
 
-exec { 'killmenow_process':
-   command => 'pkill -f killmenow',
-   onlyif  => 'grep -f killmenow'
+exec { 'killmenow':
+   command => '/usr/bin/pkill -f killmenow',
+   onlyif  => '/usr/bin/pgrep -f killmenow'
 }
