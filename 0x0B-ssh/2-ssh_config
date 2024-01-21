@@ -1,5 +1,6 @@
-Host alx
-    HostName 100.25.111.193
+Host *
+    HostName *
     User ubuntu
     IdentityFile ~/.ssh/school
+    PreferredAuthentications publickey
     PasswordAuthentication no
