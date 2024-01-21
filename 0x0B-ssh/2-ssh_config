@@ -1,6 +1,6 @@
 # ~/.ssh/config
 Host *
-    HostName 54.84.203.118
+    HostName 100.25.179.193
     User ubuntu
     IdentityFile ~/.ssh/school
     PreferredAuthentications publickey
