@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Custom 404 page that contains a string
+
+sudo apt-get update
+sudo apt-get -y install nginx
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
+repl="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.bing.com permanent;"
+repl+="\n\n\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\troot /var/www/html;\n\t\tinternal;\n\t\treturn 404 '<html><head><title>404 Not Found</title></head><body><h1>Ceci n'est pas une page</h1></body></html>';\n\t}"
+sudo sed -i "s/server_name _;/$repl/" /etc/nginx/sites-enabled/default
+sudo service nginx restart
