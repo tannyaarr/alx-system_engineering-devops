@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Redirects to another page
+
+sudo apt-get update
+sudo apt-get -y install nginx
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
+repl="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.bing.com permanent;"
+sudo sed -i "s/server_name _;/$repl/" /etc/nginx/sites-enabled/default
+sudo service nginx restart
