@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Install a nginx web server
+
+sudo apt-get update
+sudo apt-get -y install nginx
+sudo sed -i 's/80 default_server/80/g' /etc/nginx/sites-available
+sudo /etc/init.d/nginx restart
+echo "Hello World!" | sudo tee /var/www/html/index.html
