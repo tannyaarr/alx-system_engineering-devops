@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Return page containing Hello Holberton when querying the root of it
+
+docker exec -it 47ca3994a491 /bin/bash
+echo "Hello Holberton" > /var/www/html/index.html
+service apache2 restart
+exit
