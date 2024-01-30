@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Configures a brand a new Ubuntu machine
+# Configures a brand a new Ubuntu machine for and installs nginx
 
 hostname=$(hostname)
 
