@@ -5,7 +5,16 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install -y haproxy
 
-cat << EOF >  /etc/haproxy/haproxy.cfg
+sudo tee /etc/haproxy/haproxy.cfg > /dev/null <<EOT
+global
+    daemon
+    maxconn 256
+
+defaults
+    mode http
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
 
 frontend hhtp-in
 	bind *:80
@@ -15,8 +24,11 @@ frontend hhtp-in
 backend servers
 	mode http
 	balance roundrobin
-	server web-01 100.25.179.193-web-01:80 check
-	server web-02 52.86.33.156-web-02:80 check
-EOF
-echo "ENABLED =1" | sudo tee /etc/default/haproxy
-sudo systemctl restart haproxy
+	server web-01 100.25.179.193:80 check
+	server web-02 52.86.33.156:80 check
+EOT
+sudo haproxy -c -f /etc/haproxy/haproxy.cfg
+
+sudo systemctl start haproxy
+
+sudo systemctl enable haproxy
