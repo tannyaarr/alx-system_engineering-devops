@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Server 1
+
+#setting up the ssh-gent
+eval $(ssh-agent)
+
+#path to identifyFile
+ssh-add ~/.ssh/school
+
+# Username and IP Address
+ssh ubuntu@100.25.179.193
