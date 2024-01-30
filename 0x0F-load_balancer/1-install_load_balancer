@@ -25,7 +25,7 @@ backend servers
 	mode http
 	balance roundrobin
 	server web-01 100.25.179.193:80 check
-	server web-02 52.86.33.156:80 check
+	server web-02 54.174.161.74:80 check
 EOT
 sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 
