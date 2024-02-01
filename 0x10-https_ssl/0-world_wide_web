@@ -13,4 +13,5 @@ for sub in "${subdomains[@]}"; do
     record=$(dig +short $sub.$domain)
     type=$(dig $sub.$domain | awk '/ANSWER SECTION/ {getline; print $4}')
     echo "The subdomain $sub is a $type record and points to $record"
+
 done
