@@ -1,44 +1,16 @@
 #!/usr/bin/env bash
 # Configures domain zone so that the subdomain www points to my load-balancer IP
 
-display_info() {
-    local domain=$1
-    local subdomain=$2
-    local record_type=$3
-    local destination=$4
+domain=$1
+subdomain=$2
 
-    echo "The subdomain $subdomain is a $record_type record and points to $destination"
-}
-
-check_subdomain() {
-    local domain=$1
-    local subdomain=$2
-
-    local dns_info=$(dig +short $subdomain.$domain)
-
-    local record_type=$(echo "$dns_info" | awk 'NR==1 {print $1}')
-    local destination=$(echo "$dns_info" | awk 'NR==1 {print $2}')
-
-    display_info $domain $subdomain $record_type $destination
-}
-
-main() {
-    local domain=$1
-    local subdomain=$2
-
-    if [ -z "$subdomain" ]; then
-        check_subdomain $domain www
-        check_subdomain $domain lb-01
-        check_subdomain $domain web-01
-        check_subdomain $domain web-02
-    else
-        check_subdomain $domain $subdomain
-    fi
-}
-
-if [ "$#" -lt 1 ]; then
-    echo "Usage: $0 <domain> [subdomain]"
-    exit 1
+if [ -z "$subdomain" ]; then
+        subdomains=(www lb-01 web-01 web-02)
+else
+        subdomains=($subdomain)
 fi
-
-main $1 $2
+for sub in "${subdomains[@]}"; do
+        record_type=$(dig +short $sub.$domain | awk '{print $4}')
+        destination=$(dig +short $sub.$domain | awk '{print $5}')
+        echo "The subdomain $sub is a $record_type record and points tp $destination"
+done
