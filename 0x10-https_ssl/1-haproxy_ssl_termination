@@ -4,15 +4,10 @@ global
     chroot /var/lib/haproxy
     stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
     tune.ssl.default-dh-param 2048
-    ssl-default-bind-options ssl-min-ver TLSv1.2
     stats timeout 30s
     user haproxy
     group haproxy
     daemon
-
-    # Default SSL material locations
-    ca-base /etc/ssl/certs
-    crt-base /etc/ssl/private
 
 defaults
     log global
@@ -20,24 +15,17 @@ defaults
     option httplog
     option dontlognull
     timeout connect 5000
-    timeout client  50000
-    timeout server  50000
-    errorfile 400 /etc/haproxy/errors/400.http
-    errorfile 403 /etc/haproxy/errors/403.http
-    errorfile 408 /etc/haproxy/errors/408.http
-    errorfile 500 /etc/haproxy/errors/500.http
-    errorfile 502 /etc/haproxy/errors/502.http
-    errorfile 503 /etc/haproxy/errors/503.http
-    errorfile 504 /etc/haproxy/errors/504.http
+    timeout client 50000
+    timeout server 50000
 
-
-frontend teechistudio-tech-frontend
+frontend www-frontend
     bind *:443 ssl crt /etc/letsencrypt/live/www.teechistudio.tech.pem
-    http-request add-header X-Forwarded-Proto http
-    http-request redirect scheme https if !{ ssl_fc }
-    default_backend teechistudio-tech-backend
+    http-request add-header X-Forwarded-Proto https
+    acl is_holberton hdr_end(host) -i www.teechistudio.tech
+    use_backend holberton_backend if is_holberton
 
-backend teechistudio-tech-backend
-    redirect scheme https if !{ ssl_fc }
+backend holberton_backend
+    mode http
+    balance roundrobin
     server 254410-web-01 100.25.179.193:80 check
     server 254410-web-02 54.174.161.74:80 check
