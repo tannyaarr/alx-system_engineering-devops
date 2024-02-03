@@ -1,34 +1,29 @@
 #!/usr/bin/env bash
-# Displays information about subdomans
-display_info() {
-	local SUB_DOMAIN="$1"
-	local RECORD_TYPE="$2"
-	local DESTINATION="$3"
+# Displays information about subdomains
 
-	echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
+print_domain_subdomain () {
+    dig +short "$1.$2" | awk -v subdomain="$1" -v record_type="$2" -v domain="$3" '
+        BEGIN { found = 0 }
+        {
+            found = 1;
+            print "The subdomain " subdomain " is a " $1 " record and points to " $2
+        }
+        END { if (found == 0) print "The subdomain " subdomain " does not have a record in the domain " domain }
+    '
 }
 
-get_subdomain_info() {
-	local sub_domain="$1"
-	local domain="$2"
+if [ "$#" -eq 1 ]; then
+    domain="$1"
+    subdomains=("www" "lb-01" "web-01" "web-02")
 
-	local dig_output=$(dig "$sub_domain.$domain" | grep -A1 "ANSWER SECTION" | tail -n 1)
-
-	local record_type=$(echo "$dig_output" | awk '{print $4}')
-	local ip=$(echo "$dig_output" | awk '{print $5}')
-
-	display_info "$sub_domain" "$record_type" "$ip"
-}
-
-domain=$1
-subdomain=$2
-
-if [ -z "$subdomain" ]; then
-	subdomains=("www" "lb-01" "web-01" "web-02")
+    for subdomain in "${subdomains[@]}"; do
+        print_domain_subdomain "$subdomain" "$domain" "$domain"
+    done
+elif [ "$#" -eq 2 ]; then
+    domain="$1"
+    subdomain="$2"
+    print_domain_subdomain "$subdomain" "$domain" "$domain"
 else
-	subdomains=($subdomain)
+    echo "Usage: $0 <domain> [subdomain]"
+    exit 1
 fi
-
-for element in "${subdomains[@]}"; do
-	get_subdomain_info $element $domain
-done
