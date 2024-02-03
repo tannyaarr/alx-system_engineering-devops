@@ -1,15 +1,35 @@
 #!/usr/bin/env bash
 # Configures domain zone so that the subdomain www points to my load-balancer IP
-print_domain_subdomain () {
-    dig "$1" | grep -A1 'ANSWER SECTION:' | sed -r "s/$1./$2/g" | awk -F" " ' NR==2 { print "The subdomain " $1 " is a " $4 " record and points to " $5 }'
+
+display_info() {
+	local SUB_DOMAIN="$1"
+	local RECORD_TYPE="$2"
+	local DESTINATION="$3"
+
+	echo "The subdomain $SUB_DOMAIN is a $RECORD_TYPE record and points to $DESTINATION"
 }
 
-if [ "$#" -eq 2 ]
-then
-    print_domain_subdomain "$2.$1" "$2"
+get_subdomain_info() {
+	local sub_domain="$1"
+	local domain="$2"
+
+	local dig_output=$(dig "$sub_domain.$domain" | grep -A1 "ANSWER SECTION" | tail -n 1)
+
+	local record_type=$(echo "$dig_output" | awk '{print $4}')
+	local ip=$(echo "$dig_output" | awk '{print $5}')
+
+	display_info "$sub_domain" "$record_type" "$ip"
+}
+
+domain=$1
+subdomain=$2
+
+if [ -z "$subdomain" ]; then
+	subdomains=("www" "lb-01" "web-01" "web-02")
 else
-    print_domain_subdomain "www.$1" "www"
-    print_domain_subdomain "lb-01.$1" "lb-01"
-    print_domain_subdomain "web-01.$1" "web-01"
-    print_domain_subdomain "web-02.$1" "web-02"
+	subdomains=($subdomain)
 fi
+
+for element in "${subdomains[@]}"; do
+	get_subdomain_info $element $domain
+done
