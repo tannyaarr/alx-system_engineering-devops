@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+#creates a certifacte
+
 global
     log /dev/log local0
     log /dev/log local1 notice
