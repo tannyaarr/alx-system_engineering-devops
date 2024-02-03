@@ -31,15 +31,14 @@ defaults
     errorfile 503 /etc/haproxy/errors/503.http
     errorfile 504 /etc/haproxy/errors/504.http
 
-frontend http_frontend
-    mode http
+frontend www_frontend
     bind *:80
     bind *:443 ssl crt /etc/letsencrypt/live/www.teechistudio.tech.pem
     http-request add-header X-Forwarded-Proto https
-    http-request redirect scheme https if !{ ssl_fc }
-    use_backend http_holberton
+    http-request redirect scheme https 301 if !{ ssl_fc }
+    deafult_backend www_backend
 
-backend http_backend
+backend www_backend
     mode http
     redirect scheme https if !{ ssl_fc }
     server 254410-web-01 100.25.179.193:80
