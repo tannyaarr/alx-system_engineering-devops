@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Nginx running as the nginx user
+sudo systemctl stop nginx
+sudo sed -i 's/user\s*nginx;/user nginx;\nlisten 8080;/' /etc/nginx/nginx.conf
+
+sudo systemctl start nginx
+pus aux | grep nginx
+
+nestat -tuln | grep 8080
