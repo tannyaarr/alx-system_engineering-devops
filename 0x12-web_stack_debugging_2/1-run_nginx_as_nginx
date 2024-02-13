@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 # Nginx running as the nginx user
-sudo systemctl stop nginx
-sudo sed -i 's/user\s*nginx;/user nginx;\nlisten 8080;/' /etc/nginx/nginx.conf
-
-sudo systemctl start nginx
-pus aux | grep nginx
-
-nestat -tuln | grep 8080
+apt- get update
+apt-get install -y nginx
+sed -i -e 's/^user .*;/user nginx;/' /etc/nginx/nginx.conf
+sed -i -e 's/listen 80;/listen 8080;/g' /etc/nginx/sites-available/default
+pkill nginx
+nginx -g 'daemon off;'
