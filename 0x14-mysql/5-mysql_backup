@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Generates a MySQL dump and creates a cmpressed archive out of it
 
-mysql_password=$1
-timestamp=$(date + "%d-%m-%y")
-mysqldump -u root -p "${mysql_password}" --all-databases | gzip > "backup_${timestamp}.sgl.gz"
+day=$(date +"%d")
+month=$(date +"%m")
+year=$(date +"%Y")
+file_name="$day-$month-$year.tar.gz"
+
+mysqldump --all-databases -u root --password="$1" > back.sql
+tar -czvf "$file_name" back.sql
