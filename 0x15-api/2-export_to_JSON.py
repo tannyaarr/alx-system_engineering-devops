@@ -29,7 +29,7 @@ if __name__ == "__main__":
             tasks.append(task_dict)
         todos_user[user_id] = tasks
 
-        file = user_id + 'json'
+        file = user_id + '.json'
 
         with open(file, mode='w') as user_file:
             json.dump(todos_user, user_file)
